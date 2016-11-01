@@ -6,6 +6,7 @@ import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 import akka.actor.ActorSystem;
+import akka.actor.Terminated;
 import junit.framework.TestCase;
 
 public class FraqtalOnAkkaTest extends TestCase {
@@ -21,11 +22,10 @@ public class FraqtalOnAkkaTest extends TestCase {
 		system = ActorSystem.create("Test");
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void tearDown() throws Exception {
 		
 		system.terminate();
-        Future f = system.whenTerminated();
+        Future<Terminated> f = system.whenTerminated();
         Await.result(f, Duration.create(1, TimeUnit.SECONDS));
         
 		super.tearDown();
