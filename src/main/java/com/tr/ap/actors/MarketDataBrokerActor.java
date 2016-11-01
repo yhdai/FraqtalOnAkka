@@ -17,7 +17,16 @@ import com.tr.ap.data.MarketDataUnSubscribeCmd;
 public class MarketDataBrokerActor extends UntypedActor {
 	private HashMap<String, List<ActorRef>> m_ricSubscriberMap = new HashMap<String, List<ActorRef>>();
 	
+	
+	@Override
+    public void preStart() throws Exception {
+        System.out.println(getSelf().path());
+    }
+	
+	@Override
     public void onReceive(Object message) {
+		System.out.println(message);
+		
         if (message instanceof MarketDataSubscribeCmd) {
         	MarketDataSubscribeCmd subCmd = (MarketDataSubscribeCmd) message;
         	List<ActorRef> subscribers = m_ricSubscriberMap.get(subCmd.m_ric);

@@ -26,7 +26,14 @@ public class SampleQuacActor extends UntypedActor {
 		m_actorSystem.actorSelection("/user/referencedatabrokeractor").tell(refDataReqCmd, getSelf());
 	}
 	
+	@Override
+    public void preStart() throws Exception {
+        System.out.println(getSelf().path());
+    }
+	
+	@Override
     public void onReceive(Object message) {
+		System.out.println(message);
         if (message instanceof ReferenceData) {
         	ReferenceData refData = (ReferenceData) message;
         	// receiving reference data

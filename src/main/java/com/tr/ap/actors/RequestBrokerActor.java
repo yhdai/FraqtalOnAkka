@@ -15,13 +15,20 @@ public class RequestBrokerActor extends UntypedActor {
 		m_actorSystem = actorSystem;
 	}
 	
+	@Override
+    public void preStart() throws Exception {
+        System.out.println(getSelf().path());
+    }
+	
+	@Override
 	public void onReceive(Object message) {
+		System.out.println(message);
         if (message instanceof CalculationRequestCmd) {
         	CalculationRequestCmd reqCmd = (CalculationRequestCmd) message;
         	
-        	// startup one new quac
+        	// startup one new quac for the calculation
         	if(reqCmd.m_quac == "SampleQuac") {
-        		ActorRef sampleQuacActor = m_actorSystem.actorOf(Props.create(SampleQuacActor.class, reqCmd), "samplequacactor");
+        		ActorRef sampleQuacActor = getContext().actorOf(Props.create(SampleQuacActor.class, reqCmd), "samplequacactor");
         		
         	}
         }

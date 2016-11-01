@@ -11,7 +11,14 @@ import com.tr.ap.data.ReferenceDataRequestCmd;
 
 public class ReferenceDataBrokerActor extends UntypedActor {
 	
+	@Override
+    public void preStart() throws Exception {
+        System.out.println(getSelf().path());
+    }
+	
+	@Override
     public void onReceive(Object message) {
+		System.out.println(message);
         if (message instanceof ReferenceDataRequestCmd) {
         	ReferenceDataRequestCmd reqCmd = (ReferenceDataRequestCmd) message;
         	
