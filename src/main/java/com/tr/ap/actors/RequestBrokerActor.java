@@ -27,7 +27,7 @@ public class RequestBrokerActor extends UntypedActor {
         	CalculationRequestCmd reqCmd = (CalculationRequestCmd) message;
         	
         	// startup one new quac for the calculation
-        	if(reqCmd.m_quac == "SampleQuac") {
+        	if(reqCmd.m_quac.toLowerCase() == "samplequac") {
         		ActorRef sampleQuacActor = getContext().actorOf(Props.create(SampleQuacActor.class, reqCmd), "samplequacactor");
         		
         	}

@@ -11,10 +11,8 @@ import com.tr.ap.data.*;
 public class SampleQuacActor extends UntypedActor {
 	
 	private CalculationRequestCmd m_reqCmd = null;
-	private ActorSystem m_actorSystem = null;
-	public SampleQuacActor(CalculationRequestCmd reqCmd, ActorSystem actorSystem) {
+	public SampleQuacActor(CalculationRequestCmd reqCmd) {
 		m_reqCmd = reqCmd;
-		m_actorSystem = actorSystem;
 		Init();
 	}
     
@@ -23,7 +21,7 @@ public class SampleQuacActor extends UntypedActor {
 		
 		// start to get reference data
 		ReferenceDataRequestCmd refDataReqCmd = new ReferenceDataRequestCmd(m_reqCmd.m_ric);
-		m_actorSystem.actorSelection("/user/referencedatabrokeractor").tell(refDataReqCmd, getSelf());
+		getContext().actorSelection("/user/referencedatabrokeractor").tell(refDataReqCmd, getSelf());
 	}
 	
 	@Override
@@ -39,7 +37,7 @@ public class SampleQuacActor extends UntypedActor {
         	// receiving reference data
         	// start to subscribe market data
         	MarketDataSubscribeCmd subCmd = new MarketDataSubscribeCmd(m_reqCmd.m_ric);
-        	m_actorSystem.actorSelection("/user/marketdatabrokeractor").tell(subCmd, getSelf());
+        	getContext().actorSelection("/user/marketdatabrokeractor").tell(subCmd, getSelf());
         }
         else if (message instanceof MarketData) {
         	MarketData mktData = (MarketData) message;
