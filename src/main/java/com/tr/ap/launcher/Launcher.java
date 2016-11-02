@@ -5,6 +5,9 @@ import akka.actor.Props;
 import akka.actor.ActorSystem;
 
 import com.tr.ap.actors.*;
+import com.tr.ap.data.CalculationRequestCmd;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 public class Launcher {
 
@@ -12,22 +15,27 @@ public class Launcher {
   public static void main(String[] args) throws Exception {
     Launcher launcher = new Launcher();
     
-    launcher.LaunchRequestBroker();
+    ActorRef requestBrokerActor = launcher.LaunchRequestBroker();
     launcher.LaunchReferenceDataBroker();
     launcher.LaunchMarketDataBroker();
     
+    CalculationRequestCmd calcReqCmd = new CalculationRequestCmd("AAPL.O", "samplequac", "{\"Fields\":\"TR.SharesOutstanding\",\"Format\":\"Col,|Va,Row|\"}", "");
+    requestBrokerActor.tell(calcReqCmd, null);
   }
   
   public Launcher() {
-	  m_actorSystem = ActorSystem.create("fraqtal");
+	  Config config = ConfigFactory.load("application");
+	  String systemName = "fraqtal";
+      config = config.getConfig(systemName);
+      m_actorSystem = ActorSystem.create(systemName, config);
   }
   
   public void Init() {
 	  
   }
   
-  private void LaunchRequestBroker() {
-	  ActorRef requestBrokerActor = m_actorSystem.actorOf(Props.create(RequestBrokerActor.class, m_actorSystem), "requestbrokeractor");
+  private ActorRef LaunchRequestBroker() {
+	  return m_actorSystem.actorOf(Props.create(RequestBrokerActor.class, m_actorSystem), "requestbrokeractor");
   }
   
   private void LaunchReferenceDataBroker() {
